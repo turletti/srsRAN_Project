@@ -22,13 +22,13 @@ jobs:
             CONTEXT: ./docker/telegraf
 
           # srsRAN project (release_avx512)
-          - NAME: srsran-gnb
-            DOCKERFILE: ./docker/Dockerfile
-            CONTEXT: ./
-            MARCH: x86-64-v4
-            PLATFORM: amd64
-            UHD_VERSION: "4.7.0.0"
-            DPDK_VERSION: "24.11.2"
+          # - NAME: srsran-gnb
+          #   DOCKERFILE: ./docker/Dockerfile
+          #   CONTEXT: ./
+          #   MARCH: x86-64-v4
+          #   PLATFORM: amd64
+          #   UHD_VERSION: "4.7.0.0"
+          #   DPDK_VERSION: "24.11.2"
 
     steps:
       - name: Checkout code
