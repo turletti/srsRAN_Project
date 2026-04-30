@@ -21,6 +21,7 @@
  */
 
 #pragma once
+#include "../csi_logger.h"
 
 #include "srsran/phy/support/interpolator.h"
 #include "srsran/phy/support/re_buffer.h"
@@ -81,7 +82,11 @@ public:
     do_compute(estimate, grid, port, pilots, cfg);
   }
 
+  /// Setter pour le CSI Logger
+  void set_csi_logger(std::shared_ptr<srsran::csi_logger> logger) { csi_log = logger; }
 private:
+  /// CSI Logger instance
+  std::shared_ptr<srsran::csi_logger> csi_log;
   /// Actual implementation of the \c compute public method.
   void do_compute(channel_estimate&           estimate,
                   const resource_grid_reader& grid,

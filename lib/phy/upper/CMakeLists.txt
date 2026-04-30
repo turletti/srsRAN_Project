@@ -40,6 +40,7 @@ add_library(srsran_uplink_processor
 target_link_libraries(srsran_uplink_processor srsran_channel_processors)
 
 add_library(srsran_upper_phy
+        csi_logger.cpp
         upper_phy_error_handler_impl.cpp
         upper_phy_factories.cpp
         upper_phy_impl.cpp

@@ -21,6 +21,7 @@
  */
 
 #include "port_channel_estimator_average_impl.h"
+#include "../csi_logger.h"
 #include "port_channel_estimator_helpers.h"
 #include "srsran/phy/constants.h"
 #include "srsran/phy/support/re_buffer.h"
@@ -317,6 +318,26 @@ void port_channel_estimator_average_impl::compute_hop(srsran::channel_estimate& 
                               first_symbol,
                               last_symbol,
                               hop_offset);
+  // CSI Logging
+  if (csi_log) {
+    // Log each frequency response symbol
+    for (unsigned i_symbol = 0; i_symbol < filtered_pilots_lse.get_nof_symbols(); ++i_symbol) {
+      // Convert to vector for the logger
+      span<const cf_t> freq_resp = filtered_pilots_lse.get_symbol(i_symbol, 0);
+      std::vector<std::complex<float>> h_vec(freq_resp.begin(), freq_resp.end());
+      
+      // Calculate real symbol index in slot
+      unsigned symbol_idx = first_symbol + i_symbol;
+      
+      csi_log->log_channel_estimate(
+        cfg.slot.value(),      // slot_idx
+        symbol_idx,            // symbol_idx
+        port,                  // port_idx
+        h_vec
+      );
+    }
+  }
+
 }
 
 std::optional<float> port_channel_estimator_average_impl::preprocess_pilots_and_estimate_cfo(
