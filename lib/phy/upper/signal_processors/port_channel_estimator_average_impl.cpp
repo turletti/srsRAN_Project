@@ -321,7 +321,7 @@ void port_channel_estimator_average_impl::compute_hop(srsran::channel_estimate& 
   // CSI Logging
   if (csi_log) {
     // Log each frequency response symbol
-    for (unsigned i_symbol = 0; i_symbol < filtered_pilots_lse.get_nof_symbols(); ++i_symbol) {
+    for (unsigned i_symbol = 0; i_symbol < filtered_pilots_lse.size().nof_symbols; ++i_symbol) {
       // Convert to vector for the logger
       span<const cf_t> freq_resp = filtered_pilots_lse.get_symbol(i_symbol, 0);
       std::vector<std::complex<float>> h_vec(freq_resp.begin(), freq_resp.end());
@@ -330,7 +330,7 @@ void port_channel_estimator_average_impl::compute_hop(srsran::channel_estimate& 
       unsigned symbol_idx = first_symbol + i_symbol;
       
       csi_log->log_channel_estimate(
-        cfg.slot.value(),      // slot_idx
+        0,                      // slot_idx (not available in cfg)
         symbol_idx,            // symbol_idx
         port,                  // port_idx
         h_vec
