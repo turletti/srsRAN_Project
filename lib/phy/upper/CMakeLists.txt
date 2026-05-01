@@ -68,4 +68,4 @@ add_library(srsran_upper_phy_support
         rx_buffer_pool_impl.cpp
 )
 
-add_to_exported_libs(log_likelihood_ratio srsran_upper_phy_support)
+add_to_exported_libs(log_likelihood_ratio srsran_upper_phy_support srsran_upper_phy)
