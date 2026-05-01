@@ -57,6 +57,7 @@ void srsran::configure_cli11_with_gnb_appconfig_schema(CLI::App& app, gnb_appcon
 {
   gnb_appconfig& gnb_cfg = gnb_parsed_cfg;
   app.add_flag("--dryrun", gnb_cfg.enable_dryrun, "Enable application dry run mode")->capture_default_str();
+  app.add_flag("--csi-logger-enabled", gnb_cfg.csi_logger_enabled, "Enable CSI Logger")->capture_default_str();
 
   add_option(app, "--gnb_id", gnb_cfg.gnb_id.id, "gNodeB identifier")->capture_default_str();
   add_option(app, "--gnb_id_bit_length", gnb_cfg.gnb_id.bit_length, "gNodeB identifier length in bits")

@@ -57,6 +57,7 @@ upper_phy_impl::upper_phy_impl(upper_phy_impl_config&& config) :
 {
   // Initialize CSI Logger
   csi_log = std::make_shared<csi_logger>(csi_logger_config());
+  // Initialize CSI Logger if enabled
   if (config.csi_logger_enabled && csi_log) {
     csi_log->initialize();
   }
