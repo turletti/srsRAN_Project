@@ -24,6 +24,7 @@
 
 #include "uplink_request_processor_impl.h"
 #include "upper_phy_error_handler_impl.h"
+#include "srsran/phy/upper/csi_logger.h"
 #include "upper_phy_pdu_validators.h"
 #include "upper_phy_rx_results_notifier_wrapper.h"
 #include "upper_phy_rx_symbol_handler_impl.h"
@@ -173,6 +174,9 @@ private:
   /// Timing events handler.
   upper_phy_timing_handler_impl timing_handler;
   /// Error events handler.
+  /// CSI Logger instance.
+  std::shared_ptr<csi_logger> csi_log;
   upper_phy_error_handler_impl error_handler;
+  /// CSI Logger instance.
 };
 } // namespace srsran
