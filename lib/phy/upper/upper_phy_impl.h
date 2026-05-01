@@ -70,6 +70,8 @@ struct upper_phy_impl_config {
   std::shared_ptr<upper_phy_metrics_collector> metrics_collector;
   /// RX symbol handler.
   std::unique_ptr<upper_phy_rx_symbol_handler> rx_symbol_handler;
+  /// CSI logger.
+  bool csi_logger_enabled = false; 
 };
 
 /// \brief Implementation of the upper PHY interface.

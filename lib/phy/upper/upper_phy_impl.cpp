@@ -56,7 +56,8 @@ upper_phy_impl::upper_phy_impl(upper_phy_impl_config&& config) :
   error_handler(ul_processor_pool->get_slot_processor_pool())
 {
   // Initialize CSI Logger
-  if (csi_log) {
+  csi_log = std::make_shared<csi_logger>(csi_logger_config());
+  if (config.csi_logger_enabled && csi_log) {
     csi_log->initialize();
   }
 

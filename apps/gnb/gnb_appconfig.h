@@ -67,6 +67,8 @@ struct gnb_appconfig {
   remote_control_appconfig remote_control_config;
   /// Dry run mode enabled flag.
   bool enable_dryrun = false;
+  /// CSI logger.
+  bool csi_logger_enabled = false;
 };
 
 } // namespace srsran
