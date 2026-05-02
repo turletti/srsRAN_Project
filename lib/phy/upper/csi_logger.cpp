@@ -19,7 +19,7 @@ bool csi_logger::initialize()
 {
   std::lock_guard<std::mutex> lock(mutex);
 
-  if (!config.enabled || !output_stream.is_open()) {
+  if (!config.enabled) {
     return true;
   }
 

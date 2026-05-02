@@ -480,7 +480,18 @@ create_ul_processor_factory(const upper_phy_factory_configuration& config,
   csi_logger_config cfg;
   cfg.enabled = true;
   auto csi_log = std::make_shared<csi_logger>(cfg);
-  csi_log->initialize();
+  std::ofstream df("/tmp/csi_debug.log", std::ios::app);
+  df << "Before initialize()" << std::endl;
+  df.close();
+  if (!csi_log->initialize()) {
+    std::ofstream df2("/tmp/csi_debug.log", std::ios::app);
+    df2 << "CSI Logger initialize() FAILED!" << std::endl;
+    df2.close();
+  } else {
+    std::ofstream df3("/tmp/csi_debug.log", std::ios::app);
+    df3 << "CSI Logger initialize() SUCCESS!" << std::endl;
+    df3.close();
+  }
   std::shared_ptr<port_channel_estimator_factory> ch_estimator_factory =
       create_port_channel_estimator_factory_sw(ta_est_factory, csi_log);
   report_error_if_not(prg_factory, "Invalid channel estimator factory.");
