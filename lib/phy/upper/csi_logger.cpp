@@ -8,7 +8,9 @@
 using namespace srsran;
 
 csi_logger::csi_logger(const csi_logger_config& cfg) : config(cfg) {
-  srslog::fetch_basic_logger("PHY").debug("CSI Logger constructor called, enabled={}", cfg.enabled);
+  std::ofstream debug_file("/tmp/csi_debug.log", std::ios::app);
+  debug_file << "CSI_CONSTRUCTOR: enabled=" << cfg.enabled << " file=" << cfg.output_file << std::endl;
+  debug_file.close();
 }
 
 csi_logger::~csi_logger() { stop(); }
@@ -29,11 +31,15 @@ bool csi_logger::initialize()
   }
 
   if (!output_stream.is_open()) {
-    srslog::fetch_basic_logger("PHY").error("Failed to open CSI logger file: {}", config.output_file);
+    std::ofstream df("/tmp/csi_debug.log", std::ios::app);
+    df << "INIT_FAILED: " << config.output_file << std::endl;
+    df.close();
     return false;
   }
 
-  srslog::fetch_basic_logger("PHY").info("CSI Logger initialized, file: {}", config.output_file);
+  std::ofstream df2("/tmp/csi_debug.log", std::ios::app);
+  df2 << "INIT_SUCCESS: " << config.output_file << std::endl;
+  df2.close();
   return true;
 }
 
