@@ -107,7 +107,8 @@ public:
 };
 
 std::shared_ptr<port_channel_estimator_factory>
-create_port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory);
+create_port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory,
+                                         std::shared_ptr<class csi_logger> csi_log = nullptr);
 
 std::shared_ptr<port_channel_estimator_factory>
 create_port_channel_estimator_pool_factory(std::shared_ptr<port_channel_estimator_factory> ch_est_factory,

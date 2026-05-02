@@ -177,7 +177,7 @@ private:
   upper_phy_timing_handler_impl timing_handler;
   /// Error events handler.
   /// CSI Logger instance.
-  std::shared_ptr<csi_logger> csi_log;
+
   upper_phy_error_handler_impl error_handler;
   /// CSI Logger instance.
 };

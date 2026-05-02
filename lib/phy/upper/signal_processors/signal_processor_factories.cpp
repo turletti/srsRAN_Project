@@ -260,8 +260,9 @@ private:
 class port_channel_estimator_factory_sw : public port_channel_estimator_factory
 {
 public:
-  explicit port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory_) :
-    ta_estimator_factory(std::move(ta_estimator_factory_))
+  explicit port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory_,
+                                             std::shared_ptr<csi_logger> csi_log_ = nullptr) :
+    ta_estimator_factory(std::move(ta_estimator_factory_)), csi_log(std::move(csi_log_))
   {
     srsran_assert(ta_estimator_factory, "Invalid TA estimator factory.");
   }
@@ -273,15 +274,20 @@ public:
   {
     std::unique_ptr<interpolator> interp = create_interpolator();
 
-    return std::make_unique<port_channel_estimator_average_impl>(std::move(interp),
-                                                                 ta_estimator_factory->create(),
-                                                                 fd_smoothing_strategy,
-                                                                 td_interpolation_strategy,
-                                                                 compensate_cfo);
+    auto estimator = std::make_unique<port_channel_estimator_average_impl>(std::move(interp),
+                                                                           ta_estimator_factory->create(),
+                                                                           fd_smoothing_strategy,
+                                                                           td_interpolation_strategy,
+                                                                           compensate_cfo);
+    if (csi_log) {
+      estimator->set_csi_logger(csi_log);
+    }
+    return estimator;
   }
 
 private:
   std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory;
+  std::shared_ptr<csi_logger> csi_log;
 };
 
 class port_channel_estimator_pool_factory : public port_channel_estimator_factory
@@ -408,9 +414,10 @@ srsran::create_nzp_csi_rs_generator_pool_factory(std::shared_ptr<nzp_csi_rs_gene
 }
 
 std::shared_ptr<port_channel_estimator_factory>
-srsran::create_port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory)
+srsran::create_port_channel_estimator_factory_sw(std::shared_ptr<time_alignment_estimator_factory> ta_estimator_factory,
+                                                 std::shared_ptr<csi_logger> csi_log)
 {
-  return std::make_shared<port_channel_estimator_factory_sw>(std::move(ta_estimator_factory));
+  return std::make_shared<port_channel_estimator_factory_sw>(std::move(ta_estimator_factory), std::move(csi_log));
 }
 
 std::shared_ptr<port_channel_estimator_factory>

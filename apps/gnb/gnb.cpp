@@ -292,7 +292,10 @@ int main(int argc, char** argv)
   }
 
   // Set up logging.
+  std::cerr << "[CHECKPOINT] About to initialize_log()" << std::endl;
+  std::cerr << "[CHECKPOINT] o_du_app_unit created at line 243, initialize_log at line 295" << std::endl;
   initialize_log(gnb_cfg.log_cfg.filename);
+  std::cerr << "[CHECKPOINT] initialize_log() completed" << std::endl;
   auto log_flusher = make_scope_exit([]() { srslog::flush(); });
   register_app_logs(gnb_cfg, *o_cu_cp_app_unit, *o_cu_up_app_unit, *o_du_app_unit);
 
@@ -475,6 +478,7 @@ int main(int argc, char** argv)
   odu_dependencies.rlc_p              = du_pcaps.rlc.get();
   odu_dependencies.e2_client_handler  = e2_gw_du.get();
   odu_dependencies.metrics_notifier   = &metrics_notifier_forwarder;
+  odu_dependencies.csi_logger_enabled = gnb_cfg.csi_logger_enabled;
 
   auto du_inst_and_cmds = o_du_app_unit->create_flexible_o_du_unit(odu_dependencies);
 

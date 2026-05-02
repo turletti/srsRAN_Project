@@ -1,12 +1,15 @@
 #include "csi_logger.h"
 #include "srsran/support/srsran_assert.h"
+#include "srsran/srslog/srslog.h"
 #include <iostream>
 #include <chrono>
 #include <cmath>
 
 using namespace srsran;
 
-csi_logger::csi_logger(const csi_logger_config& cfg) : config(cfg) {}
+csi_logger::csi_logger(const csi_logger_config& cfg) : config(cfg) {
+  srslog::fetch_basic_logger("PHY").debug("CSI Logger constructor called, enabled={}", cfg.enabled);
+}
 
 csi_logger::~csi_logger() { stop(); }
 
@@ -14,7 +17,7 @@ bool csi_logger::initialize()
 {
   std::lock_guard<std::mutex> lock(mutex);
 
-  if (!config.enabled) {
+  if (!config.enabled || !output_stream.is_open()) {
     return true;
   }
 
@@ -26,9 +29,11 @@ bool csi_logger::initialize()
   }
 
   if (!output_stream.is_open()) {
+    srslog::fetch_basic_logger("PHY").error("Failed to open CSI logger file: {}", config.output_file);
     return false;
   }
 
+  srslog::fetch_basic_logger("PHY").info("CSI Logger initialized, file: {}", config.output_file);
   return true;
 }
 
@@ -37,13 +42,18 @@ void csi_logger::log_channel_estimate(unsigned slot_idx,
                                      unsigned port_idx,
                                      const std::vector<std::complex<float>>& channel_estimates)
 {
-  if (!config.enabled) {
+  if (!config.enabled || !output_stream.is_open()) {
     return;
   }
 
   slot_counter++;
   if (slot_counter % config.log_period_slots != 0) {
     return;
+  }
+  
+  // Reset counter to prevent overflow
+  if (slot_counter > 1000000) {
+    slot_counter = 0;
   }
 
   std::lock_guard<std::mutex> lock(mutex);
@@ -77,15 +87,17 @@ void csi_logger::log_channel_estimate(unsigned slot_idx,
     }
   }
 
-  if (measurement_count % 100 == 0) {
-    output_stream.flush();
-  }
-
+  output_stream.flush();
   measurement_count++;
 }
 
 void csi_logger::write_binary(const csi_measurement& meas)
 {
+  static bool once = true;
+  if (once) {
+    srslog::fetch_basic_logger("PHY").debug("CSI Logger: Writing first binary measurement");
+    once = false;
+  }
   output_stream.write(reinterpret_cast<const char*>(&meas.timestamp_us), sizeof(meas.timestamp_us));
   output_stream.write(reinterpret_cast<const char*>(&meas.slot_idx), sizeof(meas.slot_idx));
   output_stream.write(reinterpret_cast<const char*>(&meas.subcarrier_idx), sizeof(meas.subcarrier_idx));

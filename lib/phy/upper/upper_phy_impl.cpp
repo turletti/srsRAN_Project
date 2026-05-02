@@ -55,13 +55,6 @@ upper_phy_impl::upper_phy_impl(upper_phy_impl_config&& config) :
   timing_handler(notifier_dummy),
   error_handler(ul_processor_pool->get_slot_processor_pool())
 {
-  // Initialize CSI Logger
-  csi_log = std::make_shared<csi_logger>(csi_logger_config());
-  // Initialize CSI Logger if enabled
-  if (config.csi_logger_enabled && csi_log) {
-    csi_log->initialize();
-  }
-
   srsran_assert(dl_processor_pool, "Invalid downlink processor pool");
   srsran_assert(dl_rg_pool, "Invalid downlink resource grid pool");
   srsran_assert(ul_processor_pool, "Invalid uplink processor pool");

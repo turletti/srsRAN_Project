@@ -69,6 +69,7 @@ struct o_du_unit_dependencies {
   rlc_pcap*                       rlc_p              = nullptr;
   e2_connection_client*           e2_client_handler  = nullptr;
   app_services::metrics_notifier* metrics_notifier   = nullptr;
+  bool                            csi_logger_enabled = false;
 };
 
 } // namespace srsran
