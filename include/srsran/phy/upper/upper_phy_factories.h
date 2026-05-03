@@ -393,6 +393,8 @@ struct upper_phy_factory_dependencies {
   std::optional<std::shared_ptr<hal::hw_accelerator_pusch_dec_factory>> hw_decoder_factory;
   /// CSI Logger report period in slots
   unsigned csi_logger_period_slots = 1;
+  /// CSI Logger: log all subcarriers (true) or 1 per PRB (false)
+  bool csi_logger_all_subcarriers = true;
 };
 
 /// Creates and returns an upper PHY factory.

@@ -480,6 +480,7 @@ int main(int argc, char** argv)
   odu_dependencies.metrics_notifier   = &metrics_notifier_forwarder;
   odu_dependencies.csi_logger_enabled = gnb_cfg.csi_logger_enabled;
   odu_dependencies.csi_logger_period_slots = gnb_cfg.csi_logger_period_slots;
+  odu_dependencies.csi_logger_all_subcarriers = gnb_cfg.csi_logger_all_subcarriers;
 
   auto du_inst_and_cmds = o_du_app_unit->create_flexible_o_du_unit(odu_dependencies);
 

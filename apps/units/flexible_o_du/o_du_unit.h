@@ -71,6 +71,7 @@ struct o_du_unit_dependencies {
   app_services::metrics_notifier* metrics_notifier       = nullptr;
   bool                            csi_logger_enabled       = false;
   unsigned                        csi_logger_period_slots  = 1;
+  bool                            csi_logger_all_subcarriers = true;
 };
 
 } // namespace srsran
