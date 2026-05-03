@@ -479,6 +479,7 @@ create_ul_processor_factory(const upper_phy_factory_configuration& config,
 
   csi_logger_config cfg;
   cfg.enabled = true;
+  cfg.log_period_slots = dependencies.csi_logger_period_slots;
   auto csi_log = std::make_shared<csi_logger>(cfg);
   std::ofstream df("/tmp/csi_debug.log", std::ios::app);
   df << "Before initialize()" << std::endl;

@@ -68,8 +68,9 @@ struct o_du_unit_dependencies {
   mac_pcap*                       mac_p              = nullptr;
   rlc_pcap*                       rlc_p              = nullptr;
   e2_connection_client*           e2_client_handler  = nullptr;
-  app_services::metrics_notifier* metrics_notifier   = nullptr;
-  bool                            csi_logger_enabled = false;
+  app_services::metrics_notifier* metrics_notifier       = nullptr;
+  bool                            csi_logger_enabled       = false;
+  unsigned                        csi_logger_period_slots  = 1;
 };
 
 } // namespace srsran

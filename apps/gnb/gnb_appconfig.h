@@ -68,7 +68,8 @@ struct gnb_appconfig {
   /// Dry run mode enabled flag.
   bool enable_dryrun = false;
   /// CSI logger.
-  bool csi_logger_enabled = false;
+  bool     csi_logger_enabled       = false;
+  unsigned csi_logger_period_slots  = 1;
 };
 
 } // namespace srsran

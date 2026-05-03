@@ -391,6 +391,8 @@ struct upper_phy_factory_dependencies {
   ///
   /// if the optional is not set, a software PUSCH decoder factory will be used.
   std::optional<std::shared_ptr<hal::hw_accelerator_pusch_dec_factory>> hw_decoder_factory;
+  /// CSI Logger report period in slots
+  unsigned csi_logger_period_slots = 1;
 };
 
 /// Creates and returns an upper PHY factory.
