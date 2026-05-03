@@ -68,7 +68,7 @@ void csi_logger::log_channel_estimate(unsigned slot_idx,
   auto timestamp = std::chrono::duration_cast<std::chrono::microseconds>(
                        now.time_since_epoch()).count();
 
-  unsigned step = config.rb_granularity ? 12 : 1;
+  unsigned step = 1;  // Always log all subcarriers
 
   for (size_t i = 0; i < channel_estimates.size(); i += step) {
     if (config.max_subcarriers > 0 && i >= config.max_subcarriers) {
