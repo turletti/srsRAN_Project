@@ -213,6 +213,7 @@ ue_cell_event_manager::ue_cell_event_manager(ue_event_manager&          parent_,
   ev_logger(cell_ev.ev_logger),
   ind_pdu_pool(std::make_unique<pdu_indication_pool>(logger)),
   dl_bo_mng(std::make_unique<ue_dl_buffer_occupancy_manager>(*this)),
+  dl_csi_log(std::make_unique<dl_csi_logger>(dl_csi_logger::config{})),
   pending_events(CELL_EVENT_LIST_SIZE)
 {
 }
@@ -608,7 +609,7 @@ void ue_cell_event_manager::handle_uci_indication(const uci_indication& ind)
 
         // Process CSI.
         if (pusch_pdu->csi.has_value()) {
-          handle_csi(*ue_cc, *pusch_pdu->csi);
+          handle_csi(*ue_cc, uci_sl, *pusch_pdu->csi);
         }
       } else if (const auto* pucch_f2f3f4 =
                      std::get_if<uci_indication::uci_pdu::uci_pucch_f2_or_f3_or_f4_pdu>(&uci_pdu->pdu)) {
@@ -632,7 +633,7 @@ void ue_cell_event_manager::handle_uci_indication(const uci_indication& ind)
 
         // Process CSI.
         if (pucch_f2f3f4->csi.has_value()) {
-          handle_csi(*ue_cc, *pucch_f2f3f4->csi);
+          handle_csi(*ue_cc, uci_sl, *pucch_f2f3f4->csi);
         }
 
         const bool is_uci_valid =
@@ -959,13 +960,14 @@ void ue_cell_event_manager::handle_harq_ind(ue_cell&                            
   }
 }
 
-void ue_cell_event_manager::handle_csi(ue_cell& ue_cc, const csi_report_data& csi_rep)
+void ue_cell_event_manager::handle_csi(ue_cell& ue_cc, slot_point uci_sl, const csi_report_data& csi_rep)
 {
   // Forward CSI bits to UE.
   ue_cc.handle_csi_report(csi_rep);
 
   // Log event.
   ev_logger.enqueue(scheduler_event_logger::csi_report_event{ue_cc.ue_index, ue_cc.rnti(), csi_rep});
+  if (dl_csi_log) { dl_csi_log->log_csi_report(ue_cc.rnti(), uci_sl, csi_rep); }
 }
 
 void ue_cell_event_manager::push_event(du_cell_index_t cell_index, event_t event)

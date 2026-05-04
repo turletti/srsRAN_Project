@@ -27,6 +27,7 @@
 #include "../ue_context/ue.h"
 #include "ue_fallback_scheduler.h"
 #include "srsran/adt/mpmc_queue.h"
+#include "dl_csi_logger.h"
 #include "srsran/adt/unique_function.h"
 #include "srsran/ran/du_types.h"
 
@@ -147,7 +148,7 @@ private:
                        slot_point                             uci_sl,
                        span<const mac_harq_ack_report_status> harq_bits,
                        std::optional<float>                   pucch_snr);
-  void handle_csi(ue_cell& ue_cc, const csi_report_data& csi_rep);
+  void handle_csi(ue_cell& ue_cc, slot_point uci_sl, const csi_report_data& csi_rep);
 
   // shared parameters.
   ue_event_manager&     parent;
@@ -167,6 +168,7 @@ private:
   std::unique_ptr<pdu_indication_pool> ind_pdu_pool;
 
   std::unique_ptr<ue_dl_buffer_occupancy_manager> dl_bo_mng;
+  std::unique_ptr<dl_csi_logger>              dl_csi_log;
 
   event_queue pending_events;
 
