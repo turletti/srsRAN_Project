@@ -78,7 +78,11 @@ public:
     static_vector<layer_dmrs_pattern, pusch_constants::MAX_NOF_LAYERS> dmrs_pattern;
     /// List of receive ports.
     static_vector<uint8_t, DMRS_MAX_NPORTS> rx_ports;
-    /// \brief DM-RS scaling factor with respect to data amplitude.
+    /// Slot index for CSI logging
+    unsigned slot_idx = 0;
+    /// RNTI for CSI logging per UE
+    uint16_t rnti = 0;
+    /// \brief DM-RS scaling factor
     ///
     /// Should be equal to one for PUCCH and equal to parameter \f$\beta_{\textup{PUSCH}}^{\textup{DMRS}}\f$ (see
     /// TS38.214 Section 6.2.2) for PUSCH.

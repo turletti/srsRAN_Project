@@ -40,7 +40,8 @@ public:
   ~csi_logger();
 
   bool initialize();
-  void log_channel_estimate(unsigned slot_idx,
+  void log_channel_estimate(uint16_t rnti,
+                           unsigned slot_idx,
                            unsigned symbol_idx,
                            unsigned port_idx,
                            const std::vector<std::complex<float>>& channel_estimates);

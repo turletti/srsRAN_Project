@@ -86,6 +86,8 @@ public:
     unsigned nof_symbols = 0;
     /// List of receive ports.
     static_vector<uint8_t, DMRS_MAX_NPORTS> rx_ports;
+    /// RNTI for CSI logging per UE
+    uint16_t rnti = 0;
 
     /// \brief Gets the number of transmit layers.
     ///
