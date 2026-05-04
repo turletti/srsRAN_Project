@@ -235,6 +235,7 @@ void pusch_processor_impl::process(span<uint8_t>                    data,
   ch_est_config.first_symbol = pdu.start_symbol_index;
   ch_est_config.nof_symbols  = pdu.nof_symbols;
   ch_est_config.rx_ports.assign(pdu.rx_ports.begin(), pdu.rx_ports.end());
+  ch_est_config.rnti = pdu.rnti;
   dependencies->get_estimator().estimate(ch_estimate, grid, ch_est_config);
 
   // Set the DC (Direct Current) subcarrier to zero if its position is within the resource grid and transform precoding

@@ -330,9 +330,10 @@ void port_channel_estimator_average_impl::compute_hop(srsran::channel_estimate& 
       unsigned symbol_idx = first_symbol + i_symbol;
       
       csi_log->log_channel_estimate(
-        0,                      // slot_idx (not available in cfg)
-        symbol_idx,            // symbol_idx
-        port,                  // port_idx
+        cfg.rnti,                           // rnti
+        cfg.slot.slot_index(),              // slot_idx
+        symbol_idx,                         // symbol_idx
+        port,                               // port_idx
         h_vec
       );
     }
