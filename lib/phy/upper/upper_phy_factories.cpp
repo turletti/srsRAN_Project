@@ -578,7 +578,7 @@ create_ul_processor_factory(const upper_phy_factory_configuration& config,
     pusch_channel_estimator_factory = pusch_channel_estimator_factory =
         create_dmrs_pusch_estimator_factory_sw(prg_factory,
                                                low_papr_sequence_gen_factory,
-                                               ch_estimator_factory,
+                                               pusch_ch_estimator_factory,
                                                pusch_chan_estimator_fd_strategy,
                                                pusch_chan_estimator_td_strategy,
                                                config.pusch_channel_estimator_compensate_cfo);
