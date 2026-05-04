@@ -1,5 +1,4 @@
 #pragma once
-
 #include <complex>
 #include <cstdint>
 #include <memory>
@@ -7,6 +6,8 @@
 #include <vector>
 #include <fstream>
 #include <mutex>
+#include <map>
+#include <set>
 
 namespace srsran {
 
@@ -21,7 +22,7 @@ struct csi_logger_config {
   std::string format = "binary";
 };
 
-/// Mesure CSI
+/// Mesure CSI (26 bytes avec RNTI)
 struct csi_measurement {
   uint64_t timestamp_us;
   uint32_t slot_idx;
@@ -30,6 +31,7 @@ struct csi_measurement {
   float phase;
   uint8_t symbol_idx;
   uint8_t port_idx;
+  uint16_t rnti;  // NEW: RNTI for per-UE logging
 };
 
 /// Logger CSI
@@ -38,7 +40,6 @@ class csi_logger
 public:
   explicit csi_logger(const csi_logger_config& cfg);
   ~csi_logger();
-
   bool initialize();
   void log_channel_estimate(uint16_t rnti,
                            unsigned slot_idx,
@@ -51,13 +52,15 @@ public:
 
 private:
   csi_logger_config config;
-  std::ofstream output_stream;
+  std::map<uint16_t, std::ofstream> output_streams;  // One file per RNTI
+  std::set<uint16_t> csv_headers_written;
   mutable std::mutex mutex;
   uint64_t measurement_count = 0;
   uint32_t slot_counter = 0;
-
-  void write_binary(const csi_measurement& meas);
-  void write_csv(const csi_measurement& meas);
+  std::string get_output_filename_for_rnti(uint16_t rnti);
+  std::ofstream& get_or_create_stream(uint16_t rnti);
+  void write_binary(const csi_measurement& meas, uint16_t rnti);
+  void write_csv(const csi_measurement& meas, uint16_t rnti);
 };
 
 }  // namespace srsran
