@@ -30,13 +30,13 @@ std::string dl_csi_logger::filename(rnti_t rnti) const
 {
   char buf[256];
   snprintf(buf, sizeof(buf), "%s/csi_dl_0x%04x.csv",
-           cfg.output_dir.c_str(), static_cast<uint16_t>(rnti));
+           cfg.output_dir.c_str(), to_value(rnti));
   return buf;
 }
 
 std::ofstream& dl_csi_logger::get_or_create_stream(rnti_t rnti)
 {
-  uint16_t key = static_cast<uint16_t>(rnti);
+  uint16_t key = to_value(rnti);
   if (streams.find(key) == streams.end()) {
     streams[key].open(filename(rnti), std::ios::app);
   }
@@ -49,7 +49,7 @@ void dl_csi_logger::log_csi_report(rnti_t rnti, slot_point slot, const csi_repor
     return;
   }
 
-  uint16_t key = static_cast<uint16_t>(rnti);
+  uint16_t key = to_value(rnti);
   auto&    s   = get_or_create_stream(rnti);
   if (!s.is_open()) {
     return;
@@ -68,11 +68,11 @@ void dl_csi_logger::log_csi_report(rnti_t rnti, slot_point slot, const csi_repor
                     : 0U;
   bool    pmi = csi.pmi.has_value();
 
-  s << now_us()             << ","
-    << slot.to_uint()       << ","
+  s << now_us()                     << ","
+    << slot.to_uint()               << ","
     << "0x" << std::hex << key << std::dec << ","
-    << static_cast<unsigned>(cqi) << ","
-    << static_cast<unsigned>(ri)  << ","
-    << (pmi ? 1 : 0)        << "\n";
+    << static_cast<unsigned>(cqi)   << ","
+    << static_cast<unsigned>(ri)    << ","
+    << (pmi ? 1 : 0)                << "\n";
   s.flush();
 }
