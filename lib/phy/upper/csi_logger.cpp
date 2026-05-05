@@ -46,7 +46,7 @@ std::ofstream& csi_logger::get_or_create_stream(uint16_t rnti)
 {
   if (output_streams.find(rnti) == output_streams.end()) {
     std::string filename = get_output_filename_for_rnti(rnti);
-    output_streams[rnti].open(filename, std::ios::binary | std::ios::app);
+    output_streams[rnti].open(filename, std::ios::binary | std::ios::trunc);
   }
   return output_streams[rnti];
 }

@@ -319,10 +319,6 @@ void port_channel_estimator_average_impl::compute_hop(srsran::channel_estimate& 
                               last_symbol,
                               hop_offset);
   // CSI Logging
-  {
-    std::ofstream dbg("/tmp/csi_debug.log", std::ios::app);
-    dbg << "PORT_EST: csi_log=" << (csi_log ? 1 : 0) << " rnti=" << cfg.rnti << std::endl;
-  }
   if (csi_log) {
     // Log each frequency response symbol
     for (unsigned i_symbol = 0; i_symbol < filtered_pilots_lse.size().nof_symbols; ++i_symbol) {

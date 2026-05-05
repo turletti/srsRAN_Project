@@ -38,7 +38,7 @@ std::ofstream& dl_csi_logger::get_or_create_stream(rnti_t rnti)
 {
   uint16_t key = to_value(rnti);
   if (streams.find(key) == streams.end()) {
-    streams[key].open(filename(rnti), std::ios::app);
+    streams[key].open(filename(rnti), std::ios::trunc);
   }
   return streams[key];
 }
